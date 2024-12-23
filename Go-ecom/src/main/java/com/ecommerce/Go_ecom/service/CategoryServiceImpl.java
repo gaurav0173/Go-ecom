@@ -5,29 +5,28 @@ import com.ecommerce.Go_ecom.exceptions.ResourceNotFoundException;
 import com.ecommerce.Go_ecom.model.Category;
 import com.ecommerce.Go_ecom.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
+
+
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-  //  private List<Category> categories = new ArrayList<Category>();
-
 
     @Autowired
     private CategoryRepository categoryRepository;
-    private Long nextId = 1L;
-
 
 
     @Override
     public List<Category> getAllCategories(){
-        return categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
+        if (categories.isEmpty()) {
+            throw new APIException("No categories created till now");
+        }
+        return categories;
     }
 
     @Override
