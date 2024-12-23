@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
      private long categoryId;
 
      @NotBlank
+     @Size(min = 5, message = "Category Name Must Contain Atleast 5 Characters")
      private String categoryName;
 
 

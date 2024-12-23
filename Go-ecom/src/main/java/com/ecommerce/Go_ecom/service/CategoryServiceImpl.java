@@ -1,5 +1,6 @@
 package com.ecommerce.Go_ecom.service;
 
+import com.ecommerce.Go_ecom.exceptions.ResourceNotFoundException;
 import com.ecommerce.Go_ecom.model.Category;
 import com.ecommerce.Go_ecom.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public String deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("category", "categoryId", categoryId));
 
 
 
@@ -49,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category updateCategory(Category category, Long categoryId) {
 
         Category savedCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(()  -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resourse Not Found"));
+                .orElseThrow(()  -> new ResourceNotFoundException("category", "categoryId", categoryId));
 
         category.setCategoryId(categoryId);
         savedCategory = categoryRepository.save(category);
