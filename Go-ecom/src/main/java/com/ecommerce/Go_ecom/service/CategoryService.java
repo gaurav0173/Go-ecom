@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 
 public interface CategoryService {
-    CategoryResponse getAllCategories(Integer pageNumber, Integer pageSize);
+    CategoryResponse getAllCategories(Integer pageNumber, Integer pageSize, String sortBy, String order);
     CategoryDTO createCategory(CategoryDTO categoryDTO);
     CategoryDTO deleteCategory(Long  categoryid);
     CategoryDTO updateCategory (CategoryDTO categoryDTO, Long categoryId);
