@@ -1,6 +1,4 @@
 package com.ecommerce.Go_ecom.Controller;
-
-import com.ecommerce.Go_ecom.model.Product;
 import com.ecommerce.Go_ecom.payload.ProductDTO;
 import com.ecommerce.Go_ecom.payload.ProductResponse;
 import com.ecommerce.Go_ecom.service.ProductService;
@@ -18,10 +16,10 @@ public class ProductController {
 
 
     @PostMapping("/admin/categories/{categoryId}/product")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody Product product,
+    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO,
                                                  @PathVariable Long categoryId) {
-        ProductDTO productDTO = productService.addProduct(categoryId, product);
-        return new ResponseEntity<>(productDTO, HttpStatus.CREATED);
+        ProductDTO savedproductDTO = productService.addProduct(categoryId, productDTO);
+        return new ResponseEntity<>(savedproductDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/public/products")
@@ -43,9 +41,9 @@ public class ProductController {
     }
 
     @PutMapping("/admin/products/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@RequestBody Product product,
+    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO,
                                                     @PathVariable Long productId) {
-      ProductDTO updatedproductDTO = productService.updateProduct(productId,product);
+      ProductDTO updatedproductDTO = productService.updateProduct(productId,productDTO);
       return new ResponseEntity<>(updatedproductDTO, HttpStatus.OK);
     }
     @DeleteMapping("/admin/products/{productId}")
