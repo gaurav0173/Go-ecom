@@ -27,10 +27,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,17 +42,16 @@ public class AuthController {
     private JwtUtils jwtUtils;
 
     @Autowired
-     AuthenticationManager authenticationManager;
+    AuthenticationManager authenticationManager;
 
     @Autowired
-     UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
     RoleRepository roleRepository;
 
     @Autowired
     PasswordEncoder encoder;
-
 
 
     public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
@@ -86,12 +83,13 @@ public class AuthController {
                 .collect(Collectors.toList());
 
         UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
-                                 userDetails.getUsername(), roles, jwtCookie.toString());
+                userDetails.getUsername(), roles, jwtCookie.toString());
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
-                                            jwtCookie.toString())
-                                                .body(response);
+                        jwtCookie.toString())
+                .body(response);
     }
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUserName(signUpRequest.getUsername())) {
@@ -142,4 +140,30 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+    @GetMapping("/username")
+    public String currentUserName(Authentication authentication) {
+        if (authentication != null)
+            return authentication.getName();
+        else
+            return "";
+
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserDetails(Authentication authentication) {
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
+                userDetails.getUsername(), roles);
+
+        return ResponseEntity.ok().body(response);
+
+
+    }
 }
+
