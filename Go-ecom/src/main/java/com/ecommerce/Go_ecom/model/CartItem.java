@@ -1,5 +1,7 @@
 package com.ecommerce.Go_ecom.model;
 
+import com.ecommerce.Go_ecom.model.Cart;
+import com.ecommerce.Go_ecom.model.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +26,7 @@ public class CartItem {
     private Product product;
 
     private Integer quantity;
-    private Double discount;
-    private Double Productprice;
+    private double discount;
+    private double productPrice;
 }
+
