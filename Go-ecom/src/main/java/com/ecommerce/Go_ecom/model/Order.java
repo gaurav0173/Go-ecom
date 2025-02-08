@@ -41,4 +41,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+
+    public void setPayment(Payment payment) {
+    }
 }
